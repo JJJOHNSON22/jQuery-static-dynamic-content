@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Document.on()</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        //Generate content dynamic content with document.on()
+        /*
+        $(document).ready(function() {
+            $('button').click(function() {
+                $('div').append('<h3>I am a dynamically generated h3</h3>');
+            });
+            $('div.a').on('mouseover', 'h3', function() {
+                $(this).css('color', 'pink');
+            });
+        });
+        */
+
+        //Generate dynamic content but results in duplicate alerts
+        /*
+        function handlers() {
+            $('h3').click(function() {
+                alert('You clicked an H3!');
+            });
+        }
+        $(document).ready(function() {
+            $('button').click(function() {
+                $('div').append('<h3>I am a dynamically generated H3</h3>');
+                handlers();
+            });
+            handlers();
+        });
+        */
+
+        //Generate dynamic content with no duplicate messages
+        function handlers() {
+            //Namespace(click.static/.dynamic) the click method and Bind(.on)/Unbind(.off) to prevent duplicate messages.
+            $('h3#static').on('click.static', function() {
+                alert('Static Message!').off("click.static");
+            });
+            $('h3').on('click.dynamic', function() {
+                alert('Dynamic Message!').off("click.dynamic");
+            });
+        }
+        $(document).ready(function() {
+            handlers();
+            $('button').click(function(event) {
+                console.log("Click");
+                $('div').append('<h3>Dynamic Content</h3>');
+                handlers();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <button id="button">Click me!</button>
+    <div>
+        <h3 id="static">Static Content</h3>
+    </div>
+    <div>
+        <h3 id="static">Static Content</h3>
+    </div>
+</body>
+
+</html>
